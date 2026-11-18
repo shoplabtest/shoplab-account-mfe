@@ -8,6 +8,7 @@
     "watch": "vite build --watch",
     "build": "vite build && node scripts/check-expose.mjs Account",
     "preview": "vite preview --port 5003 --strictPort",
+    "gen:contracts": "node ../shoplab-contracts/scripts/generate.mjs --services orders --out src/generated/contracts.ts",
     "typecheck": "tsc --noEmit",
     "test": "vitest run"
   },
