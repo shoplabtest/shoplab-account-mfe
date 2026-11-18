@@ -112,6 +112,13 @@ describe('logged in', () => {
     expect(screen.getByText('$125.00')).toBeTruthy();
   });
 
+  it('asks the orders operation of the contracts client, and labels each row for screen readers', async () => {
+    routes([{ id: 'o-8', cartId: 'c-8', status: 'paid', total: 4200, currency: 'EUR', placedAt: '2026-11-01T10:00:00Z' }]);
+    render(<Account />);
+    expect(await screen.findByLabelText('paid order, total €42.00')).toBeTruthy();
+    expect(authFetch).toHaveBeenCalledWith('/orders', undefined); // GET, no init: this is what client.listOrders() sends
+  });
+
   it('shows an empty state when there are no orders', async () => {
     routes([]);
     render(<Account />);

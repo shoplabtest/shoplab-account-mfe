@@ -1,10 +1,9 @@
-import { Money } from '@shoplab/ui-kit';
-import { authFetch } from 'host/ui';
+import { formatMoney, Money, type Currency } from '@shoplab/ui-kit';
+import { api } from '../api.ts';
 import { useAsync } from '../useAsync.ts';
-import type { OrderSummary } from '../types.ts';
 
 export function OrderHistory() {
-  const state = useAsync(() => authFetch<OrderSummary[]>('/orders'), 'orders');
+  const state = useAsync(() => api.listOrders(), 'orders');
   return (
     <section aria-label="Order history">
       <h2>Order history</h2>
@@ -15,8 +14,8 @@ export function OrderHistory() {
       ) : (
         <ul>
           {state.data.map((o) => (
-            <li key={o.id}>
-              {o.id} · {o.status} · <Money amount={o.total} currency={o.currency as 'USD'} /> · {new Date(o.placedAt).toLocaleDateString('en-US')}
+            <li key={o.id} aria-label={`${o.status} order, total ${formatMoney(o.total, o.currency as Currency)}`}>
+              {o.id} · {o.status} · <Money amount={o.total} currency={o.currency as Currency} /> · {new Date(o.placedAt).toLocaleDateString('en-US')}
             </li>
           ))}
         </ul>
